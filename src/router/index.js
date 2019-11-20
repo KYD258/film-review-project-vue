@@ -9,6 +9,8 @@ import userUpdate from '@/components/userUpdate'
 import mySubscription from '@/components/mySubscription'
 import myCreation from '@/components/myCreation'
 import shop from '@/components/shop'
+import userIndex from '@/components/userIndex'
+import videoDetail from '@/components/videoDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -19,7 +21,7 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path: '/',
+      path: '/AdminIndex',
       name: 'AdminIndex',
       component: AdminIndex
     },
@@ -57,6 +59,8 @@ export default new Router({
       path: '/shop',
       name: 'shop',
       component: shop
-    }
+    },
+    {path: '/', name: 'userIndex', component: userIndex},
+    {path: '/videoDetail/:videoId', name: 'videoDetail', component: videoDetail}
   ]
 })

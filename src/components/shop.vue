@@ -29,10 +29,14 @@
         <el-menu-item index="2" style="float: right">
           <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
         </el-menu-item>
-        <el-menu-item index="3" style="float: right">消息中心</el-menu-item>
         <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
-        <el-menu-item index="4" style="float: left;margin-left: 3%">首页</el-menu-item>
-        <el-menu-item index="5" style="float: left">电影</el-menu-item>
+        <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
+        <el-submenu index="5" style="float: left">
+          <template slot="title">资源</template>
+          <el-menu-item index="5-1">电影</el-menu-item>
+          <el-menu-item index="5-2">动漫</el-menu-item>
+          <el-menu-item index="5-3">电视剧</el-menu-item>
+        </el-submenu>
         <el-menu-item index="6" style="float: left">
           <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
         </el-menu-item>
@@ -40,7 +44,7 @@
           <router-link :to="{name:'shop'}" style="font-size: 16px"><a>商城</a></router-link>
         </el-menu-item>
 
-        <el-menu-item  style="float: right;width: 20%">
+        <el-menu-item  style="float: right;width: 30%">
           <el-input placeholder="请输入内容"  v-model="input3" class="input-with-select">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
@@ -73,11 +77,95 @@
               <div>价格 :  {{commodity.commodityPrice}}</div>
               <div>
                 <el-button type="primary"  @click="pay(commodity.commodityId)">支付</el-button>
+                <el-button type="text" @click="dialogFormVisible = true">收货地址</el-button>
+
+                <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+                  <el-form :model="form">
+                    <el-form-item label="收货地址" :label-width="formLabelWidth">
+                      <el-input v-model="form.name" autocomplete="off"></el-input>
+                    </el-form-item>
+                  </el-form>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                  </div>
+                </el-dialog>
               </div>
             </div>
           </el-card>
         </el-col>
       </el-row>
+    </div>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="this.commodityParams.size"
+      :current-page="this.commodityParams.page"
+      v-on:current-change="commodityChangePage"
+      :total="commodityTotal">
+    </el-pagination>
+
+    <div class="footer" style="float: left;width: 100%">
+      <p class="friendly-links">
+        关于FFF :
+        <a href="http://ir.maoyan.com/s/index.php#pageScroll0" target="_blank">关于我们</a>
+        <span></span>
+        <a href="http://ir.maoyan.com/s/index.php#pageScroll1" target="_blank">管理团队</a>
+        <span></span>
+        <a href="http://ir.maoyan.com/s/index.php#pageScroll2" target="_blank">投资者关系</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        友情链接 :
+        <a href="http://www.meituan.com" data-query="utm_source=wwwmaoyan" target="_blank">美团网</a>
+        <span></span>
+        <a href="http://www.gewara.com" data-query="utm_source=wwwmaoyan">格瓦拉</a>
+        <span></span>
+        <a href="http://i.meituan.com/client" data-query="utm_source=wwwmaoyan" target="_blank">美团下载</a>
+        <span></span>
+        <a href="https://www.huanxi.com" data-query="utm_source=maoyan_pc" target="_blank">欢喜首映</a>
+      </p>
+      <p class="friendly-links">
+        商务合作邮箱：v@maoyan.com
+        客服电话：10105335
+        违法和不良信息举报电话：4006018900
+      </p>
+      <p class="friendly-links">
+        用户投诉邮箱：tousujubao@meituan.com
+        舞弊线索举报邮箱：wubijubao@maoyan.com
+      </p>
+      <p class="friendly-links  credentials">
+        <a href="/about/licence/1" target="_blank">中华人民共和国增值电信业务经营许可证 京B2-20190350</a>
+        <span></span>
+        <a href="/about/licence/4" target="_blank">营业性演出许可证 京演（机构）（2019）4094号</a>
+      </p>
+      <p class="friendly-links  credentials">
+        <a href="/about/licence/3" target="_blank">广播电视节目制作经营许可证 （京）字第08478号</a>
+        <span></span>
+        <a href="/about/licence/2" target="_blank">网络文化经营许可证 京网文（2019）3837-369号 </a>
+      </p>
+      <p class="friendly-links  credentials">
+        <a href="/rules/agreement" target="_blank">FFF用户服务协议 </a>
+        <span></span>
+        <a href="/rules/rule" target="_blank">FFF平台交易规则总则 </a>
+        <span></span>
+        <a href="/rules/privacy" target="_blank">隐私政策 </a>
+      </p>
+      <p class="friendly-links  credentials">
+        <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010102003232" target="_blank">京公网安备
+          11010102003232号</a>
+      </p>
+      <p>FFF文化传媒有限公司</p>
+      <p>
+        &copy;2016
+        FFF电影 maoyan.com</p>
+      <div class="certificate">
+        <a href="http://sq.ccm.gov.cn:80/ccnt/sczr/service/business/emark/toDetail/350CF8BCA8416C4FE0530140A8C0957E"
+           target="_blank">
+          <img src="http://p0.meituan.net/moviemachine/e54374ccf134d1f7b2c5b075a74fca525326.png" />
+        </a>
+        <a href="/about/licence/5" target="_blank">
+          <img src="http://p1.meituan.net/moviemachine/805f605d5cf1b1a02a4e3a5e29df003b8376.png" />
+        </a>
+      </div>
     </div>
   </div>
 
@@ -88,27 +176,49 @@
     data() {
 
       return {
+        dialogTableVisible: false,
+        dialogFormVisible: false,
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '120px',
         activeIndex:"1",  //当前激活菜单的 index
         input3: '', //搜索的v-model
         currentDate: new Date(),
         commodity:[],
+        commodityTotal:0,
+        commodityParams:{size:6,page:1},
         // videos:{videoId:''}
       };
     },
     mounted(){
-      this.videoQuery()
+      this.commodityQuery()
     },
     methods: {
       handleSelect(key, keyPath) {   // 头部handleSelect函数
         console.log(key, keyPath);
       },
-      videoQuery:function () {
-        axios.get('/api/filmreview-commodity/commodity/getCommodityData').then(res=>{
-          alert(res.data)
-          console.log(res.data)
-          this.commodity=res.data;
-        })
-      }
+      commodityChangePage:function (page) {
+        this.commodityParams.page = page;
+        this.commodityQuery();
+      },
+      commodityQuery:function () {
+        var url = "/api/filmreview-commodity/commodity/getCommodityData/"+this.commodityParams.page+"/"+this.commodityParams.size;
+        axios.get(url).then(res =>{
+          if (res.data != null){
+            console.log(res.data.commodityList)
+            this.commodity = res.data.commodityList;
+            this.commodityTotal = res.data.total;
+          }
+        });
+      },
     }
   };
 </script>
@@ -130,6 +240,9 @@
   }
 </style>
 <style>
+  .el-row {
+    margin-left: 10%;
+  }
   .image {
     width: 100%;
     display: block;
@@ -137,7 +250,7 @@
   }
   .el-row {margin-left: 4%}
   .el-col-8 {
-    width: 19.33333%;
+    width: 25.33333%;
   }
   .el-col-offset-2 {
     margin-left: 3%;margin-top: 20px;
@@ -146,11 +259,40 @@
     margin-left: 3%;margin-top: 20px;
   }
   .el-col-offset-0 {
-    margin-left: 3%;margin-top: 20px;
+    margin-left: 5%;margin-top: 20px;
   }
 
 
+  /*尾部*/
+  a{
+    text-decoration: none;
+  }
 
+  .footer {
+    background-color: #262426;
+    padding: 56px 0;
+    margin: 0 auto;
+    min-width: 1200px;
+    margin-top: 0px;
+    color: #ccc;
+  }
+
+  .footer a{
+    color: #EF4238;
+    font-size: 14px;
+  }
+
+  .credentials a{
+    color: #ccc;
+  }
+
+  p {
+    text-color: white;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
 
   .time {
     font-size: 13px;
@@ -249,14 +391,6 @@
     color: #ccc;
   }
 
-  p {
-    text-color: white;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-  }
-
 
 
 
@@ -270,7 +404,10 @@
   }
   .el-button {
     float: left;
-    margin-left: 10%;
-    margin-top: 60px;
+    margin-left: 38%;
+    margin-top: 38px;
+  }
+  .el-pagination {
+    margin-top: 30px;
   }
 </style>

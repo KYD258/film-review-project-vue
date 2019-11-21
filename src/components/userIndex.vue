@@ -30,7 +30,7 @@
           <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
         </el-menu-item>
         <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
-        <el-menu-item index="4" style="float: left;margin-left: 3%">首页</el-menu-item>
+        <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
         <el-submenu index="5" style="float: left">
           <template slot="title">资源</template>
           <el-menu-item index="5-1">电影</el-menu-item>

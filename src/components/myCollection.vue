@@ -29,10 +29,14 @@
           <el-menu-item index="2" style="float: right">
             <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
           </el-menu-item>
-          <el-menu-item index="3" style="float: right">消息中心</el-menu-item>
           <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
-          <el-menu-item index="4" style="float: left;margin-left: 3%">首页</el-menu-item>
-          <el-menu-item index="5" style="float: left">电影</el-menu-item>
+          <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
+          <el-submenu index="5" style="float: left">
+            <template slot="title">资源</template>
+            <el-menu-item index="5-1">电影</el-menu-item>
+            <el-menu-item index="5-2">动漫</el-menu-item>
+            <el-menu-item index="5-3">电视剧</el-menu-item>
+          </el-submenu>
           <el-menu-item index="6" style="float: left">
             <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
           </el-menu-item>
@@ -40,7 +44,7 @@
             <router-link :to="{name:'shop'}" style="font-size: 16px"><a>商城</a></router-link>
           </el-menu-item>
 
-          <el-menu-item  style="float: right;width: 20%">
+          <el-menu-item  style="float: right;width: 30%">
             <el-input placeholder="请输入内容"  v-model="input3" class="input-with-select">
               <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>

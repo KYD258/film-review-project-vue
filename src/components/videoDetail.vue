@@ -59,15 +59,15 @@
               <div class="detail">制片人 :&nbsp <span class="sp">{{video.videoProducer}}</span></div>
             </el-col>
             <el-col :span="18">
-              <div class="detail" style="width: 50%"><span style="float: left">评分:&nbsp</span>
-                <!--<span class="sp">{{video.videoGrade}}</span>-->
-                <el-rate
-                  v-model="video.videoGrade"
-                  style="float: left;margin-top: 4px"
-                  disabled
-                  show-score
-                  text-color="#ff9900">
-                </el-rate>
+              <div class="detail" ><span style="float: left">评分:&nbsp</span>
+                <span class="sp" v-html='video.videoGrade==0?  "暂无评分" : video.videoGrade '></span>
+                <!--<el-rate-->
+                  <!--v-model="video.videoGrade"-->
+                  <!--style="float: left;margin-top: 4px"-->
+                  <!--disabled-->
+                  <!--show-score-->
+                  <!--text-color="#ff9900">-->
+                <!--</el-rate>-->
               </div>
             </el-col>
             <el-col :span="18">
@@ -97,7 +97,8 @@
             </el-form-item>
             <el-form-item label="评分" :label-width="formLabelWidth">
               <el-rate
-                v-model=" review.reviewGrade"
+                v-model="review.reviewGrade"
+                allow-half="true"
                 text-color="#ff9900">
               </el-rate>
             </el-form-item>
@@ -123,10 +124,10 @@
           <el-rate
             v-model="getReview.reviewGrade"
             disabled
-            show-score
-            text-color="#ff9900">
+            text-color="#ff9900"
+            score-template="{value}">
           </el-rate>
-
+          <span>{{getReview.reviewGrade*2}}</span>
           <br>
           <span style="margin-top: 10px">{{getReview.reviewContent}}</span>
           <el-divider>{{getReview.reviewCreateTime}}</el-divider></el-main>
@@ -369,7 +370,7 @@ p {
   padding: 0px;
 }
   .sp{
-    font-size: 17px;
+    font-size: 18px;
   }
   .el-rate{
     float: left;

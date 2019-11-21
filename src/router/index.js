@@ -13,6 +13,8 @@ import myCreation from '@/components/myCreation'
 import shop from '@/components/shop'
 import userIndex from '@/components/userIndex'
 import videoDetail from '@/components/videoDetail'
+import login from '@/components/login'
+import register from '@/components/register'
 Vue.use(Router)
 
 export default new Router({
@@ -69,6 +71,8 @@ export default new Router({
       component: shop
     },
     {path: '/', name: 'userIndex', component: userIndex},
-    {path: '/videoDetail/:videoId', name: 'videoDetail', component: videoDetail}
+    {path: '/videoDetail/:videoId', name: 'videoDetail', component: videoDetail},
+    {path: '/login', name: 'login', component: login},
+    {path: '/register', name: 'register', component: register}
   ]
 })

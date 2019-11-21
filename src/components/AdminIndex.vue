@@ -227,6 +227,7 @@
                           </template>
                         </el-table-column>
                         <el-table-column prop="videoName" label="视频名称"></el-table-column>
+                        <el-table-column prop="classify" label="视频分类"></el-table-column>
                         <el-table-column prop="videoDirector" label="导演"></el-table-column>
                         <el-table-column prop="videoRole" label="主演"></el-table-column>
                         <el-table-column prop="videoProducer" label="出品方"></el-table-column>
@@ -278,6 +279,9 @@
                           <el-input placeholder="视频名称" v-model="video3.videoName"></el-input>
                         </el-form-item>
                         <el-form-item >
+                          <el-input placeholder="视频分类" v-model="video3.classify"></el-input>
+                        </el-form-item>
+                        <el-form-item >
                           <el-input placeholder="视频描述" v-model="video3.videoDirector"></el-input>
                         </el-form-item>
                         <el-form-item >
@@ -325,6 +329,9 @@
                       <el-form :label-position="labelPosition" :model="video1">
                         <el-form-item>
                           <el-input placeholder="视频名称" v-model="video1.videoName"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                          <el-input placeholder="视频类型" v-model="video1.classify"></el-input>
                         </el-form-item>
                         <el-form-item >
                           <el-input placeholder="视频描述" v-model="video1.videoDirector"></el-input>
@@ -411,8 +418,8 @@
             commodityTotal:0,
             commodityParams:{size:4,page:1},
 
-            video1:{videoId:'',videoName:'',videoDirector:'',videoRole:'',videoProducer:'',videoReview:'',videoGrade:'',videoLanguage:'',videoShowTime:'',videoLength:'',videoType:'',visible:'',videoPic:'',showIndex:'',createTime:'',collectionOrsubscription:'',videoStatus:'',videoUrl:''},
-            video3:{videoId:'',videoName:'',videoDirector:'',videoRole:'',videoProducer:'',videoReview:'',videoGrade:'',videoLanguage:'',videoShowTime:'',videoLength:'',videoType:'',visible:'',videoPic:'',showIndex:'',createTime:'',collectionOrsubscription:'',videoStatus:'',videoUrl:''},
+            video1:{videoId:'',videoName:'',videoDirector:'',videoRole:'',videoProducer:'',videoReview:'',videoGrade:'',videoLanguage:'',videoShowTime:'',videoLength:'',videoType:'',visible:'',videoPic:'',showIndex:'',createTime:'',collectionOrsubscription:'',videoStatus:'',videoUrl:'',classify:''},
+            video3:{videoId:'',videoName:'',videoDirector:'',videoRole:'',videoProducer:'',videoReview:'',videoGrade:'',videoLanguage:'',videoShowTime:'',videoLength:'',videoType:'',visible:'',videoPic:'',showIndex:'',createTime:'',collectionOrsubscription:'',videoStatus:'',videoUrl:'',classify:''},
             video2:[],
             videoKey:'',
             videoTotal:0,
@@ -594,6 +601,7 @@
           var url = "/api/filmreview-search/videoSearch/selectVideoByPage?page="+this.videoParams.page+"&size="+this.videoParams.size+"&keys="+this.videoKey;
           axios.get(url).then(res =>{
              if(res.data != null){
+//                 this.video2 = '',
                  this.video2 = res.data.videoList;
                  this.total = res.data.videoTotal;
              }

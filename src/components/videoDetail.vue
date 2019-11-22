@@ -39,10 +39,9 @@
 
     <div class="a" style="float: left;width: 100%">
       <div style="float: left;margin-left: 20%">
-        <el-image
-          style="width: 250px; height: 290px"
-          :src=video.videoPic>
-        </el-image>
+        <router-link :to="{name:'VideoPlay',params:{videoId:video.videoId}}">
+          <img :src="video.videoPic" class="image" style="width: 250px;height: 290px">
+        </router-link>
       </div>
         <div class="e">
           <el-row :gutter="20">
@@ -227,6 +226,9 @@ export default {
   mounted() {
     this.queryVideo();
     this.queryReview();
+    this.$router.afterEach((to, from, next) => {
+      window.scrollTo(0, 0)
+    })
   },
   methods:{
     handleSelect(key, keyPath) {   // 头部handleSelect函数
@@ -278,7 +280,7 @@ export default {
           this.review=res.data;
         }
       })
-    }
+    },
   }
 }
 </script>

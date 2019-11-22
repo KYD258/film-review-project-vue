@@ -200,7 +200,7 @@
             axios.post("api/user/loginByPassword",{"phone":this.ruleForm.phone,"passWord":this.ruleForm.passWord}).then(res=>{
               alert(res.data)
               if(res.data=="success"){
-                this.$router.push("/creation")
+                this.$router.push("/")
               }
 
             })

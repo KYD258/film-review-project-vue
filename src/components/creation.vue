@@ -184,8 +184,6 @@
           'http://q02obletz.bkt.clouddn.com/tyhj.jpg',
           'http://q02obletz.bkt.clouddn.com/wzzd.jpg'
         ],
-        activeIndex:"1",  //当前激活菜单的 index
-        input3: '', //搜索的v-model
         dialogImageUrl: '',
         dialogVisible: false,
         fileList: [],
@@ -201,7 +199,7 @@
       }
     },
     mounted(){
-
+      this.queryUser();
       this.getCreationAllMessage();
     },
     methods:{
@@ -216,17 +214,16 @@
           }
         })
       },
-      out:function () {
-        axios.get("api/user/loginOut").then(res=>{});
-        location.reload();
-        this.$router.push("/")
-      },
       getCreationAllMessage:function () {
         axios.post('/api/filmreview-personalcenter/creation/getCreationAllMessage').then(res=>{
           // alert(res.data)
           console.log(res.data)
           this.creationAllMessage=res.data;
           })
+      },
+      out:function () {
+        axios.get("api/user/loginOut").then(res=>{});
+        location.reload();
       },
       creationPath:function (response,file,fileList) {
       this.creation.creationPic=response;

@@ -342,9 +342,9 @@
         location.reload();
         this.$router.push("/")
       },
-      pay:function (commodityId,commodityName,commodityPic) {
-        alert(commodityPic+""+commodityName)
-        axios.post("api/filmreview-pay/alipay/pay",{commodityId:commodityId,commodityName:commodityName,commodityPic:commodityPic}).then(res1=>{
+      pay:function (commodityId,commodityName,commodityPrice) {
+        alert(commodityPrice+""+commodityName)
+        axios.post("api/filmreview-pay/alipay/pay",{commodityId:commodityId,commodityName:commodityName,commodityPrice:commodityPrice}).then(res1=>{
           this.$router.replace({
             path: '/applyText',
             query: {html: res1.data}

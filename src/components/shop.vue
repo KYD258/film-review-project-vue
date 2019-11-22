@@ -78,7 +78,7 @@
             <!--</router-link>-->
             <div style="padding: 14px;">
               <div>{{commodity.commodityName}}</div>
-              <div>价格 :  {{commodity.commodityPrice}}</div>
+              <div>价格 : {{commodity.commodityPrice}}</div>
               <div>
                 <el-button type="primary"  @click="pay(commodity.commodityId,commodity.commodityName,commodity.commodityPrice)">支付</el-button>
                 <el-button type="text" @click="getUserMessage()">收货地址</el-button>
@@ -227,14 +227,14 @@
           }
         })
       },
-      pay:function (commodityId,commodityName,commodityPic) {
-        alert(commodityPic+""+commodityName)
+      pay:function (commodityId,commodityName,commodityPrice) {
+        alert(commodityPrice+""+commodityName)
         axios.get('/api/filmreview-personalcenter/user/getUserMessage/').then(res => {
         if (res.data != null&&res.data!=""){
             //alert(res.data+"123")
             console.log(res.data)
               this.user = res.data;
-          axios.post("api/filmreview-pay/alipay/pay",{commodityId:commodityId,commodityName:commodityName,commodityPic:commodityPic}).then(res1=>{
+          axios.post("api/filmreview-pay/alipay/pay",{commodityId:commodityId,commodityName:commodityName,commodityPrice:commodityPrice}).then(res1=>{
             this.$router.replace({
               path: '/applyText',
               query: {html: res1.data}

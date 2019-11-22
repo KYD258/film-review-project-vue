@@ -12,20 +12,39 @@
         active-text-color="red">
         <el-submenu index="1" style="float: right;margin-right: 5%">
           <template slot="title">admin</template>
-          <el-menu-item index="1-1">我的收藏</el-menu-item>
-          <el-menu-item index="1-2">我的订阅</el-menu-item>
-          <el-menu-item index="1-3">个人中心</el-menu-item>
-          <el-menu-item index="1-4">注销登陆</el-menu-item>
+          <el-menu-item index="1-1">
+            <router-link :to="{name:'myCollection'}" style="font-size: 16px"><a>我的收藏</a></router-link>
+          </el-menu-item>
+          <el-menu-item index="1-2">
+            <router-link :to="{name:'mySubscription'}" style="font-size: 16px"><a>我的订阅</a></router-link>
+          </el-menu-item>
+          <el-menu-item index="1-3">
+            <router-link :to="{name:'myCreation'}" style="font-size: 16px"><a>我的创作中心</a></router-link>
+          </el-menu-item>
+          <el-menu-item index="1-4">
+            <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
+          </el-menu-item>
+          <el-menu-item index="1-5">注销登陆</el-menu-item>
         </el-submenu>
-        <el-menu-item index="2" style="float: right">订单管理</el-menu-item>
-        <el-menu-item index="3" style="float: right">消息中心</el-menu-item>
+        <el-menu-item index="2" style="float: right">
+          <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
+        </el-menu-item>
         <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
-        <el-menu-item index="4" style="float: left;margin-left: 3%">首页</el-menu-item>
-        <el-menu-item index="5" style="float: left">电影</el-menu-item>
-        <el-menu-item index="6" style="float: left">创作中心</el-menu-item>
-        <el-menu-item index="7" style="float: left">商城</el-menu-item>
+        <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
+        <el-submenu index="5" style="float: left">
+          <template slot="title">资源</template>
+          <el-menu-item index="5-1">电影</el-menu-item>
+          <el-menu-item index="5-2">动漫</el-menu-item>
+          <el-menu-item index="5-3">电视剧</el-menu-item>
+        </el-submenu>
+        <el-menu-item index="6" style="float: left">
+          <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
+        </el-menu-item>
+        <el-menu-item index="7" style="float: left">
+          <router-link :to="{name:'shop'}" style="font-size: 16px"><a>商城</a></router-link>
+        </el-menu-item>
 
-        <el-menu-item  style="float: right;width: 25%">
+        <el-menu-item  style="float: right;width: 30%">
         <el-input placeholder="请输入内容"  v-model="input3" class="input-with-select">
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
@@ -42,7 +61,7 @@
     <br>
     <div class="body1" style="width: 1500px;float: left">
         <template>
-          <el-carousel :interval="5000" arrow="always" style="width: 640px;float: left;margin-left: 12%;margin-top: 1%">
+          <el-carousel trigger="click" :interval="5000" arrow="always" style="width: 640px;float: left;margin-left: 12%;margin-top: 1%">
             <el-carousel-item v-for="item in 4" :key="item">
             </el-carousel-item>
           </el-carousel>
@@ -70,8 +89,18 @@
     <div class="body2" style="width: 1500px;float: left;margin-top: 2%">
       <div style="float: left;width: 100%">
       <div style="float: left;margin-left: 12%;font-size: 22px">最近热门</div>
+          <el-pagination
+            style="float: left"
+            background
+            layout="prev,next"
+            :page-size="this.videoParams.size"
+            :current-page="this.videoParams.page"
+            v-on:current-change="videoChangePage"
+            :total="videoTotal">
+          </el-pagination>
         <div style="margin-left: 49%;font-size: 20px">电影排行</div>
         <br>
+
       </div>
       <br>
       <el-row style="margin-left: 12%">
@@ -87,7 +116,9 @@
             </div>
             <br>
           </el-card>
+
         </el-col>
+
         <div style="float: right;margin-right: 18%">
           <el-table
             :data="tableData"
@@ -107,6 +138,15 @@
       <br><br>
       <div style="float: left;width: 100%">
         <div style="float: left;margin-left: 12%;font-size: 22px">最新上映</div>
+        <el-pagination
+          style="float: left"
+          background
+          layout="prev,next"
+          :page-size="this.video1Params.size"
+          :current-page="this.video1Params.page"
+          v-on:current-change="video1ChangePage"
+          :total="video1Total">
+        </el-pagination>
         <div style="margin-left: 49%;font-size: 20px">新番排行</div>
         <br>
       </div>
@@ -143,6 +183,15 @@
       <br><br>
       <div style="float: left;width: 100%">
         <div style="float: left;margin-left: 12%;font-size: 22px">评分最高</div>
+        <el-pagination
+          style="float: left"
+          background
+          layout="prev,next"
+          :page-size="this.video2Params.size"
+          :current-page="this.video2Params.page"
+          v-on:current-change="video2ChangePage"
+          :total="video2Total">
+        </el-pagination>
         <div style="margin-left: 49%;font-size: 20px">电视剧排行</div>
         <br>
       </div>
@@ -260,11 +309,12 @@
         video:[],
         video1:[],
         video2:[],
-        videoTotal: 0,
-        params: {
-          size: 4,
-          page: 1
-        },
+        videoTotal:0,
+        video1Total:0,
+        video2Total:0,
+        videoParams:{size:4,page:1},
+        video1Params:{size:4,page:1},
+        video2Params:{size:4,page:1},
         tableData: [{
           name: '王小虎',
           address: '9.8'
@@ -290,27 +340,37 @@
         console.log(key, keyPath);
       },
       query(){
-        var url ="api/filmreview-video/video/findVideo/"+this.params.page+"/"+this.params.size;
+        var url ="api/filmreview-video/video/findVideo/"+this.videoParams.page+"/"+this. videoParams.size;
         axios.get(url).then(res=>{
           this.video=res.data.videoList;
           this.videoTotal=res.data.videoTotal;
         })
       },
       query1(){
-        var url ="api/filmreview-video/video/getDataByShowTime/"+this.params.page+"/"+this.params.size;
+        var url ="api/filmreview-video/video/getDataByShowTime/"+this.video1Params.page+"/"+this.video1Params.size;
         axios.get(url).then(res=>{
-            console.log(res.data)
           this.video1=res.data.videoList;
-          this.videoTotal=res.data.videoTotal;
+          this.video1Total=res.data.videoTotal;
         })
       },
       query2(){
-        var url ="api/filmreview-video/video/getDataByVideoGander/"+this.params.page+"/"+this.params.size;
+        var url ="api/filmreview-video/video/getDataByVideoGander/"+this.video2Params.page+"/"+this.video2Params.size;
         axios.get(url).then(res=>{
-          console.log(res.data)
           this.video2=res.data.videoList;
-          this.videoTotal=res.data.videoTotal;
+          this.video2Total=res.data.videoTotal;
         })
+      },
+      videoChangePage:function (page) {
+        this.videoParams.page = page;
+        this.query();
+      },
+      video1ChangePage:function (page) {
+        this.video1Params.page = page;
+        this.query1();
+      },
+      video2ChangePage:function (page) {
+        this.video2Params.page = page;
+        this.query2();
       }
     }
   }

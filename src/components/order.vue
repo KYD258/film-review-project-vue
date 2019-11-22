@@ -11,31 +11,35 @@
         font-size="20px"
         active-text-color="red">
         <el-submenu index="1" style="float: right;margin-right: 5%">
-          <template slot="title">admin</template>
-          <el-menu-item index="1-1">
+          <template slot="title">
+            <router-link type="info" v-if="msg=='登录'" :to="{name:'login'}" style="color:black">{{msg}}</router-link>
+            <router-link type="info" v-else :to="{name:'userUpdate'}" style="color:black"> <el-avatar :src="msg"></el-avatar></router-link>
+          </template>
+          <el-menu-item v-if="showItem" index="1-1">
             <router-link :to="{name:'myCollection'}" style="font-size: 16px"><a>我的收藏</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-2">
+          <el-menu-item v-if="showItem" index="1-2">
             <router-link :to="{name:'mySubscription'}" style="font-size: 16px"><a>我的订阅</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-3">
+          <el-menu-item v-if="showItem" index="1-3">
             <router-link :to="{name:'myCreation'}" style="font-size: 16px"><a>我的创作中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-4">
+          <el-menu-item v-if="showItem" index="1-4">
             <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-5">注销登陆</el-menu-item>
+          <el-menu-item v-if="showItem" index="1-5">
+            <router-link :to="{name:'order'}" style="font-size: 16px"><a>我的订单</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-6"><el-link :underline="false" @click="out()">退出登录</el-link></el-menu-item>
         </el-submenu>
-        <el-menu-item index="2" style="float: right">
-          <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
-        </el-menu-item>
+
         <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
         <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
         <el-submenu index="5" style="float: left">
           <template slot="title">资源</template>
-          <el-menu-item index="5-1">电影</el-menu-item>
-          <el-menu-item index="5-2">动漫</el-menu-item>
-          <el-menu-item index="5-3">电视剧</el-menu-item>
+          <el-menu-item index="5-1"><router-link :to="{name:'Classify',params:{typeKey:typeKey1}}">电影</router-link></el-menu-item>
+          <el-menu-item index="5-2"><router-link :to="{name:'Classify',params:{typeKey:typeKey2}}">动漫</router-link></el-menu-item>
+          <el-menu-item index="5-3"><router-link :to="{name:'Classify',params:{typeKey:typeKey3}}">电视剧</router-link></el-menu-item>
         </el-submenu>
         <el-menu-item index="6" style="float: left">
           <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
@@ -69,7 +73,7 @@
                   fixed
                   prop="orderNum"
                   label="订单编号"
-                  width="150">
+                  width="170">
                 </el-table-column>
                 <el-table-column
                   prop="commodityName"
@@ -87,7 +91,7 @@
                 <el-table-column
                   prop="commodityPrice"
                   label="价格"
-                  width="150">
+                  width="130">
                 </el-table-column>
                 <el-table-column
                   prop="description"
@@ -124,7 +128,7 @@
                   fixed
                   prop="orderNum"
                   label="订单编号"
-                  width="150">
+                  width="170">
                 </el-table-column>
                 <el-table-column
                   prop="commodityName"
@@ -142,7 +146,7 @@
                 <el-table-column
                   prop="commodityPrice"
                   label="价格"
-                  width="150">
+                  width="130">
                 </el-table-column>
                 <el-table-column
                   prop="description"
@@ -178,7 +182,7 @@
                   fixed
                   prop="orderNum"
                   label="订单编号"
-                  width="150">
+                  width="170">
                 </el-table-column>
                 <el-table-column
                   prop="commodityName"
@@ -196,7 +200,7 @@
                 <el-table-column
                   prop="commodityPrice"
                   label="价格"
-                  width="150">
+                  width="130">
                 </el-table-column>
                 <el-table-column
                   prop="description"
@@ -217,7 +221,7 @@
                   width="100">
                   <template slot-scope="tableData2">
                     <el-button @click="deleteOrder2(tableData2.row.id)"  type="text" size="small">删除</el-button>
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">支付</el-button>
+                    <el-button  type="text" size="small" @click="pay(tableData2.row.commodityId,tableData2.row.commodityName,tableData2.row.commodityPrice)">支付</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -300,6 +304,13 @@
   export default {
     data () {
       return {
+        activeIndex:"1",  //当前激活菜单的 index
+        input3: '', //搜索的v-model
+        msg:'',
+        showItem:false,
+        typeKey1:'电影',
+        typeKey2:'动漫',
+        typeKey3:'电视剧',
         tabPosition: 'left',
         activeIndex:"1",  //当前激活菜单的 index
         input3: '', //搜索的v-model
@@ -309,12 +320,36 @@
       }
     },
     mounted(){
-
+      this.queryUser();
       this.getOrderAllMessage();
       this.getPayOrder();
       this.getNoPayOrder();
     },
     methods:{
+      queryUser:function () {
+        axios.get("api/filmreview-personalcenter/user/getUserMessage").then(res=>{
+          console.log(res.data)
+          if(res.data==''){
+            this.msg='登录'
+          }else {
+            this.msg=res.data.userPic;
+            this.showItem=true;
+          }
+        })
+      },
+      out:function () {
+        axios.get("api/user/loginOut").then(res=>{});
+        location.reload();
+      },
+      pay:function (commodityId,commodityName,commodityPic) {
+        alert(commodityPic+""+commodityName)
+        axios.post("api/filmreview-pay/alipay/pay",{commodityId:commodityId,commodityName:commodityName,commodityPic:commodityPic}).then(res1=>{
+          this.$router.replace({
+            path: '/applyText',
+            query: {html: res1.data}
+          })
+        })
+      },
       //      订单删除
       deleteOrder:function(id) {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

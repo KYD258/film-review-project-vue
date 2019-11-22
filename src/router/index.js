@@ -11,12 +11,11 @@ import myCreation from '@/components/myCreation'
 import shop from '@/components/shop'
 import userIndex from '@/components/userIndex'
 import videoDetail from '@/components/videoDetail'
-import register from '@/components/register'
-import login from '@/components/login'
 import VideoPlay from '@/components/VideoPlay'
 import search from '@/components/search'
 import login from '@/components/login'
 import register from '@/components/register'
+import applyText from '@/components/applyText'
 Vue.use(Router)
 
 export default new Router({
@@ -73,9 +72,8 @@ export default new Router({
       component: shop
     },
     {path: '/', name: 'userIndex', component: userIndex},
+    {path: '/applyText', name: 'applyText', component: applyText},
     {path: '/videoDetail/:videoId', name: 'videoDetail', component: videoDetail},
-    {path: '/register', name: 'register', component: register},
-    {path: '/login', name: 'login', component: login},
     {path: '/search/:key', name: 'search', component: search},
     {path: '/videoDetail/:videoId', name: 'videoDetail', component: videoDetail},
     {path: '/login', name: 'login', component: login},

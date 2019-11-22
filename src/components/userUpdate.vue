@@ -11,31 +11,35 @@
         font-size="20px"
         active-text-color="red">
         <el-submenu index="1" style="float: right;margin-right: 5%">
-          <template slot="title">admin</template>
-          <el-menu-item index="1-1">
+          <template slot="title">
+            <router-link type="info" v-if="msg=='登录'" :to="{name:'login'}" style="color:black">{{msg}}</router-link>
+            <router-link type="info" v-else :to="{name:'userUpdate'}" style="color:black"> <el-avatar :src="msg"></el-avatar></router-link>
+          </template>
+          <el-menu-item v-if="showItem" index="1-1">
             <router-link :to="{name:'myCollection'}" style="font-size: 16px"><a>我的收藏</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-2">
+          <el-menu-item v-if="showItem" index="1-2">
             <router-link :to="{name:'mySubscription'}" style="font-size: 16px"><a>我的订阅</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-3">
+          <el-menu-item v-if="showItem" index="1-3">
             <router-link :to="{name:'myCreation'}" style="font-size: 16px"><a>我的创作中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-4">
+          <el-menu-item v-if="showItem" index="1-4">
             <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-5">注销登陆</el-menu-item>
+          <el-menu-item v-if="showItem" index="1-5">
+            <router-link :to="{name:'order'}" style="font-size: 16px"><a>我的订单</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-6"><el-link :underline="false" @click="out()">退出登录</el-link></el-menu-item>
         </el-submenu>
-        <el-menu-item index="2" style="float: right">
-          <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
-        </el-menu-item>
+
         <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
         <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
         <el-submenu index="5" style="float: left">
           <template slot="title">资源</template>
-          <el-menu-item index="5-1">电影</el-menu-item>
-          <el-menu-item index="5-2">动漫</el-menu-item>
-          <el-menu-item index="5-3">电视剧</el-menu-item>
+          <el-menu-item index="5-1"><router-link :to="{name:'Classify',params:{typeKey:typeKey1}}">电影</router-link></el-menu-item>
+          <el-menu-item index="5-2"><router-link :to="{name:'Classify',params:{typeKey:typeKey2}}">动漫</router-link></el-menu-item>
+          <el-menu-item index="5-3"><router-link :to="{name:'Classify',params:{typeKey:typeKey3}}">电视剧</router-link></el-menu-item>
         </el-submenu>
         <el-menu-item index="6" style="float: left">
           <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
@@ -55,23 +59,26 @@
       <el-form :label-position="labelPosition" label-width="80px" :model="tbUser">
         <el-upload
           class="avatar-uploader"
-          action="api/trave-user-login/getPath"
+          action="/api/filmreview-personalcenter/user/getPath"
           :show-file-list="false"
           :on-success="tbUserPath"
           :before-upload="beforeAvatarUpload">
-          <img v-if="tbUser.pic" :src="tbUser.pic" class="avatar">
+          <img v-if="tbUser.userPic" :src="tbUser.userPic" class="avatar">
           <i v-else class="el-icon-plus
           avatar-uploader-icon"></i>
         </el-upload>
         <input v-model="tbUser.userId" hidden/>
         <el-form-item label="用户名">
-          <el-input v-model="tbUser.loginName"></el-input>
+          <el-input v-model="tbUser.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="tbUser.passWord" type="password"></el-input>
         </el-form-item>
         <el-form-item label="真实姓名">
           <el-input v-model="tbUser.realName"></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-input v-model="tbUser.sex"></el-input>
+          <el-input v-model="tbUser.gender"></el-input>
         </el-form-item>
         <el-form-item label="年龄">
           <el-input v-model="tbUser.age"></el-input>
@@ -84,6 +91,9 @@
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input v-model="tbUser.email"></el-input>
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="tbUser.address"></el-input>
         </el-form-item>
         <el-button type="primary" :plain="true" @click="tbUserUpdate()" style="margin-left: 20px">确认修改</el-button>
       </el-form>
@@ -168,19 +178,39 @@
       return{
         activeIndex:"1",  //当前激活菜单的 index
         input3: '', //搜索的v-model
+        msg:'',
+        showItem:false,
+        typeKey1:'电影',
+        typeKey2:'动漫',
+        typeKey3:'电视剧',
 
-        msg:'用户注册页面',
         labelPosition:'right',
-        tbUser:{userId:'',oginName:'',realName:'',sex:'',age:'',address:'',password:'',phone:'',
-          email:'',pic:''},
+        tbUser:{userId:'',userName:'',realName:'',passWord:'',age:'',gender:'',userPic:'',phone:'',
+          email:'',userStatus:'',address:''},
       }
     },
     mounted(){
-      axios.get('/api/trave-user-login/getMsg').then(res=>{
+      this.queryUser();
+      axios.get('/api/filmreview-personalcenter/user/getUserMessage/').then(res=>{
         this.tbUser=res.data;
       })
     },
     methods:{
+      queryUser:function () {
+        axios.get("api/filmreview-personalcenter/user/getUserMessage").then(res=>{
+          console.log(res.data)
+          if(res.data==''){
+            this.msg='登录'
+          }else {
+            this.msg=res.data.userPic;
+            this.showItem=true;
+          }
+        })
+      },
+      out:function () {
+        axios.get("api/user/loginOut").then(res=>{});
+        location.reload();
+      },
       handleSelect(key, keyPath) {   // 头部handleSelect函数
         console.log(key, keyPath);
       },
@@ -190,13 +220,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          axios.post('/api/trave-user-login/tbUserUpdate',this.tbUser).then(res=> {
+          axios.post('/api/filmreview-personalcenter/user/updateUserMessage/',this.tbUser).then(res=> {
             if (res.data.code==1) {
               this.$message({
                 type: 'success',
                 message: '修改成功!'
               });
             }
+            this.$router.push("/")
           })
 
         }).catch(() => {
@@ -207,7 +238,7 @@
         });
       },
       tbUserPath:function (res,file) {
-        this.tbUser.pic=res;
+        this.tbUser.userPic=res;
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';

@@ -24,7 +24,7 @@
           <el-menu-item index="1-4">
             <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-5">注销登陆</el-menu-item>
+          <el-menu-item index="1-5"><el-link :underline="false" @click="out()">退出登录</el-link></el-menu-item>
         </el-submenu>
         <el-menu-item index="2" style="float: right">
           <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
@@ -194,6 +194,10 @@
       this.getCreationAllMessage();
     },
     methods:{
+      out:function () {
+        axios.get("api/user/loginOut").then(res=>{});
+        location.reload();
+      },
       getCreationAllMessage:function () {
         axios.post('/api/filmreview-personalcenter/creation/getCreationAllMessage').then(res=>{
           // alert(res.data)
@@ -212,11 +216,13 @@
         axios.post(url,this.creation).then(res=>{
            // alert("56546")
           //alert(res.data)
-          if(res.data!=null){
+          if(res.data.code!=0){
             this.creation=res.data
             this.getCreationAllMessage();
             this.$router.go(0)
           }
+          alert("请登录后操作")
+          this.$router.push("/login")
         })
     },
       handleSelect(key, keyPath) {   // 头部handleSelect函数

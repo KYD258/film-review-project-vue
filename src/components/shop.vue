@@ -11,31 +11,35 @@
         font-size="20px"
         active-text-color="red">
         <el-submenu index="1" style="float: right;margin-right: 5%">
-          <template slot="title">admin</template>
-          <el-menu-item index="1-1">
+          <template slot="title">
+            <router-link type="info" v-if="msg=='登录'" :to="{name:'login'}" style="color:black">{{msg}}</router-link>
+            <router-link type="info" v-else :to="{name:'userUpdate'}" style="color:black"> <el-avatar :src="msg"></el-avatar></router-link>
+          </template>
+          <el-menu-item v-if="showItem" index="1-1">
             <router-link :to="{name:'myCollection'}" style="font-size: 16px"><a>我的收藏</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-2">
+          <el-menu-item v-if="showItem" index="1-2">
             <router-link :to="{name:'mySubscription'}" style="font-size: 16px"><a>我的订阅</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-3">
+          <el-menu-item v-if="showItem" index="1-3">
             <router-link :to="{name:'myCreation'}" style="font-size: 16px"><a>我的创作中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-4">
+          <el-menu-item v-if="showItem" index="1-4">
             <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-5">注销登陆</el-menu-item>
+          <el-menu-item v-if="showItem" index="1-5">
+            <router-link :to="{name:'order'}" style="font-size: 16px"><a>我的订单</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-6"><el-link :underline="false" @click="out()">退出登录</el-link></el-menu-item>
         </el-submenu>
-        <el-menu-item index="2" style="float: right">
-          <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
-        </el-menu-item>
+
         <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
         <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
         <el-submenu index="5" style="float: left">
           <template slot="title">资源</template>
-          <el-menu-item index="5-1">电影</el-menu-item>
-          <el-menu-item index="5-2">动漫</el-menu-item>
-          <el-menu-item index="5-3">电视剧</el-menu-item>
+          <el-menu-item index="5-1"><router-link :to="{name:'Classify',params:{typeKey:typeKey1}}">电影</router-link></el-menu-item>
+          <el-menu-item index="5-2"><router-link :to="{name:'Classify',params:{typeKey:typeKey2}}">动漫</router-link></el-menu-item>
+          <el-menu-item index="5-3"><router-link :to="{name:'Classify',params:{typeKey:typeKey3}}">电视剧</router-link></el-menu-item>
         </el-submenu>
         <el-menu-item index="6" style="float: left">
           <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
@@ -76,18 +80,18 @@
               <div>{{commodity.commodityName}}</div>
               <div>价格 :  {{commodity.commodityPrice}}</div>
               <div>
-                <el-button type="primary"  @click="pay(commodity.commodityId)">支付</el-button>
-                <el-button type="text" @click="dialogFormVisible = true">收货地址</el-button>
+                <el-button type="primary"  @click="pay(commodity.commodityId,commodity.commodityName,commodity.commodityPrice)">支付</el-button>
+                <el-button type="text" @click="getUserMessage()">收货地址</el-button>
 
-                <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+                <el-dialog title="请填写正确哦,我不负责的呦!" :visible.sync="dialogFormVisible">
                   <el-form :model="form">
                     <el-form-item label="收货地址" :label-width="formLabelWidth">
-                      <el-input v-model="form.name" autocomplete="off"></el-input>
+                      <el-input v-model="user.address" autocomplete="off"></el-input>
                     </el-form-item>
                   </el-form>
                   <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                    <el-button type="primary" @click="userAddress()">确 定</el-button>
                   </div>
                 </el-dialog>
               </div>
@@ -176,6 +180,15 @@
     data() {
 
       return {
+        activeIndex:"1",  //当前激活菜单的 index
+        input3: '', //搜索的v-model
+        msg:'',
+        showItem:false,
+        typeKey1:'电影',
+        typeKey2:'动漫',
+        typeKey3:'电视剧',
+        user:{userId:'',userName:'',realName:'',passWord:'',age:'',gender:'',userPic:'',phone:'',
+          email:'',userStatus:'',address:''},
         dialogTableVisible: false,
         dialogFormVisible: false,
         form: {
@@ -199,9 +212,83 @@
       };
     },
     mounted(){
-      this.commodityQuery()
+      this.queryUser();
+      this.commodityQuery();
     },
     methods: {
+      queryUser:function () {
+        axios.get("api/filmreview-personalcenter/user/getUserMessage").then(res=>{
+          console.log(res.data)
+          if(res.data==''){
+            this.msg='登录'
+          }else {
+            this.msg=res.data.userPic;
+            this.showItem=true;
+          }
+        })
+      },
+      pay:function (commodityId,commodityName,commodityPic) {
+        alert(commodityPic+""+commodityName)
+        axios.get('/api/filmreview-personalcenter/user/getUserMessage/').then(res => {
+        if (res.data != null&&res.data!=""){
+            //alert(res.data+"123")
+            console.log(res.data)
+              this.user = res.data;
+          axios.post("api/filmreview-pay/alipay/pay",{commodityId:commodityId,commodityName:commodityName,commodityPic:commodityPic}).then(res1=>{
+            this.$router.replace({
+              path: '/applyText',
+              query: {html: res1.data}
+            })
+          })
+            }else {+
+              alert("请登录后操作")
+              this.$router.push("/login")
+            }
+
+          })
+
+
+      },
+      getUserMessage:function () {
+        axios.get('/api/filmreview-personalcenter/user/getUserMessage/').then(res => {
+       // alert(res.data+"123")
+          console.log(res.data)
+        if(res.data != null&&res.data!="") {
+            this.user = res.data;
+          this.dialogFormVisible = true;
+          }else {
+          alert("请登录后操作")
+          this.$router.push("/login")
+        }
+        })
+      },
+      out:function () {
+        axios.get("api/user/loginOut").then(res=>{});
+        location.reload();
+      },
+
+      userAddress:function () {
+      this.$confirm('此操作将修改该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.post('/api/filmreview-personalcenter/user/updateUserMessage/',this.user).then(res=> {
+          if (res.data.code==1) {
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            });
+          }
+        })
+        this.$router.go(0)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消修改'
+        });
+      });
+    },
       handleSelect(key, keyPath) {   // 头部handleSelect函数
         console.log(key, keyPath);
       },

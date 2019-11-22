@@ -11,31 +11,35 @@
         font-size="20px"
         active-text-color="red">
         <el-submenu index="1" style="float: right;margin-right: 5%">
-          <template slot="title">admin</template>
-          <el-menu-item index="1-1">
+          <template slot="title">
+            <router-link type="info" v-if="msg=='登录'" :to="{name:'login'}" style="color:black">{{msg}}</router-link>
+            <router-link type="info" v-else :to="{name:'userUpdate'}" style="color:black"> <el-avatar :src="msg"></el-avatar></router-link>
+          </template>
+          <el-menu-item v-if="showItem" index="1-1">
             <router-link :to="{name:'myCollection'}" style="font-size: 16px"><a>我的收藏</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-2">
+          <el-menu-item v-if="showItem" index="1-2">
             <router-link :to="{name:'mySubscription'}" style="font-size: 16px"><a>我的订阅</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-3">
+          <el-menu-item v-if="showItem" index="1-3">
             <router-link :to="{name:'myCreation'}" style="font-size: 16px"><a>我的创作中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-4">
+          <el-menu-item v-if="showItem" index="1-4">
             <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
           </el-menu-item>
-          <el-menu-item index="1-5">注销登陆</el-menu-item>
+          <el-menu-item v-if="showItem" index="1-5">
+            <router-link :to="{name:'order'}" style="font-size: 16px"><a>我的订单</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-6"><el-link :underline="false" @click="out()">退出登录</el-link></el-menu-item>
         </el-submenu>
-        <el-menu-item index="2" style="float: right">
-          <router-link :to="{name:'order'}" style="font-size: 16px"><a>订单管理</a></router-link>
-        </el-menu-item>
+
         <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
         <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
         <el-submenu index="5" style="float: left">
           <template slot="title">资源</template>
-          <el-menu-item index="5-1">电影</el-menu-item>
-          <el-menu-item index="5-2">动漫</el-menu-item>
-          <el-menu-item index="5-3">电视剧</el-menu-item>
+          <el-menu-item index="5-1"><router-link :to="{name:'Classify',params:{typeKey:typeKey1}}">电影</router-link></el-menu-item>
+          <el-menu-item index="5-2"><router-link :to="{name:'Classify',params:{typeKey:typeKey2}}">动漫</router-link></el-menu-item>
+          <el-menu-item index="5-3"><router-link :to="{name:'Classify',params:{typeKey:typeKey3}}">电视剧</router-link></el-menu-item>
         </el-submenu>
         <el-menu-item index="6" style="float: left">
           <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
@@ -59,7 +63,7 @@
     </div>
 
     <br>
-    <div class="body1" style="width: 1500px;float: left">
+    <div class="body1" style="width: 100%;float: left">
         <template>
           <el-carousel trigger="click" :interval="5000" arrow="always" style="width: 640px;float: left;margin-left: 12%;margin-top: 1%">
             <el-carousel-item v-for="item in 4" :key="item">
@@ -86,7 +90,7 @@
 
     <br>
 
-    <div class="body2" style="width: 1500px;float: left;margin-top: 2%">
+    <div class="body2" style="width: 100%;float: left;margin-top: 2%">
       <div style="float: left;width: 100%">
       <div style="float: left;margin-left: 12%;font-size: 22px">最近热门</div>
           <el-pagination
@@ -104,9 +108,9 @@
       </div>
       <br>
       <el-row style="margin-left: 12%">
-        <el-col :span="3" v-for="(video,index) in video" :key="video.videoId" :offset="0">
+        <el-col :span="3" v-for="(video,index) in video" :key="index" :offset="0">
           <!--<router-link :to="{name:'videoDetail'}">-->
-          <el-card :body-style="{ padding: '0px' }" style="width: 90%">
+          <el-card :body-style="{ padding: '0px' }" style="width: 100%">
             <router-link :to="{name:'videoDetail',params:{videoId:video.videoId}}">
               <img :src="video.videoPic" class="image">
             </router-link>
@@ -152,7 +156,7 @@
       </div>
       <br>
       <el-row style="margin-left: 12%">
-        <el-col :span="3" v-for="(video1,index) in video1" :key="video1.videoId" :offset="0">
+        <el-col :span="3" v-for="(video1,index) in video1" :key="index" :offset="0">
           <el-card :body-style="{ padding: '0px' }" style="width: 90%">
             <router-link :to="{name:'videoDetail',params:{videoId:video1.videoId}}">
               <img :src="video1.videoPic" class="image">
@@ -197,7 +201,7 @@
       </div>
       <br>
       <el-row style="margin-left: 12%">
-        <el-col :span="3" v-for="(video2,index) in video2" :key="video2.videoId" :offset="0">
+        <el-col :span="3" v-for="(video2,index) in video2" :key="index" :offset="0">
           <el-card :body-style="{ padding: '0px' }" style="width: 90%">
             <router-link :to="{name:'videoDetail',params:{videoId:video2.videoId}}">
               <img :src="video2.videoPic" class="image">
@@ -305,6 +309,11 @@
       return {
         activeIndex:"1",  //当前激活菜单的 index
         input3: '', //搜索的v-model
+        msg:'',
+        showItem:false,
+        typeKey1:'电影',
+        typeKey2:'动漫',
+        typeKey3:'电视剧',
         src:"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=4155496476,3511395253&fm=26&gp=0.jpg",
         video:[],
         video1:[],
@@ -334,6 +343,7 @@
       this.query();
       this.query1();
       this.query2();
+      this.queryUser();
     },
     methods: {
       handleSelect(key, keyPath) {   // 头部handleSelect函数
@@ -371,6 +381,21 @@
       video2ChangePage:function (page) {
         this.video2Params.page = page;
         this.query2();
+      },
+      queryUser:function () {
+        axios.get("api/filmreview-personalcenter/user/getUserMessage").then(res=>{
+            console.log(res.data)
+            if(res.data==''){
+              this.msg='登录'
+            }else {
+              this.msg=res.data.userPic;
+              this.showItem=true;
+            }
+        })
+      },
+      out:function () {
+        axios.get("api/user/loginOut").then(res=>{});
+        location.reload();
       }
     }
   }

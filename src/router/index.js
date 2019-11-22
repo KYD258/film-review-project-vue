@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import AdminIndex from '@/components/AdminIndex'
 import Classify from '@/components/Classify'
-
 import myCollection from '@/components/myCollection'
 import order from '@/components/order'
 import creation from '@/components/creation'
@@ -13,6 +11,10 @@ import myCreation from '@/components/myCreation'
 import shop from '@/components/shop'
 import userIndex from '@/components/userIndex'
 import videoDetail from '@/components/videoDetail'
+import register from '@/components/register'
+import login from '@/components/login'
+import VideoPlay from '@/components/VideoPlay'
+import search from '@/components/search'
 import login from '@/components/login'
 import register from '@/components/register'
 Vue.use(Router)
@@ -20,17 +22,17 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
       path: '/Classify',
       name: 'Classify',
       component: Classify
     },
     {
-      path: '/',
+      path: '/VideoPlay/:videoId',
+      name: 'VideoPlay',
+      component: VideoPlay
+    },
+    {
+      path: '/AdminIndex',
       path: '/AdminIndex',
       name: 'AdminIndex',
       component: AdminIndex
@@ -71,6 +73,10 @@ export default new Router({
       component: shop
     },
     {path: '/', name: 'userIndex', component: userIndex},
+    {path: '/videoDetail/:videoId', name: 'videoDetail', component: videoDetail},
+    {path: '/register', name: 'register', component: register},
+    {path: '/login', name: 'login', component: login},
+    {path: '/search/:key', name: 'search', component: search},
     {path: '/videoDetail/:videoId', name: 'videoDetail', component: videoDetail},
     {path: '/login', name: 'login', component: login},
     {path: '/register', name: 'register', component: register}

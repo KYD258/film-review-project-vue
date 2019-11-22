@@ -340,6 +340,7 @@
       out:function () {
         axios.get("api/user/loginOut").then(res=>{});
         location.reload();
+        this.$router.push("/")
       },
       pay:function (commodityId,commodityName,commodityPic) {
         alert(commodityPic+""+commodityName)

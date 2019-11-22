@@ -265,6 +265,7 @@
       out:function () {
         axios.get("api/user/loginOut").then(res=>{});
         location.reload();
+        this.$router.push("/")
       },
 
       userAddress:function () {

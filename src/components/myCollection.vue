@@ -1,60 +1,60 @@
 <template>
     <div>
       <div>
-        <el-menu
-          :default-active="activeIndex"
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          background-color="#fff"
-          text-color="#333"
-          font-size="20px"
-          active-text-color="red">
-          <el-submenu index="1" style="float: right;margin-right: 5%">
-            <template slot="title">
-              <router-link type="info" v-if="msg=='登录'" :to="{name:'login'}" style="color:black">{{msg}}</router-link>
-              <router-link type="info" v-else :to="{name:'userUpdate'}" style="color:black"> <el-avatar :src="msg"></el-avatar></router-link>
-            </template>
-            <el-menu-item v-if="showItem" index="1-1">
-              <router-link :to="{name:'myCollection'}" style="font-size: 16px"><a>我的收藏</a></router-link>
-            </el-menu-item>
-            <el-menu-item v-if="showItem" index="1-2">
-              <router-link :to="{name:'mySubscription'}" style="font-size: 16px"><a>我的订阅</a></router-link>
-            </el-menu-item>
-            <el-menu-item v-if="showItem" index="1-3">
-              <router-link :to="{name:'myCreation'}" style="font-size: 16px"><a>我的创作中心</a></router-link>
-            </el-menu-item>
-            <el-menu-item v-if="showItem" index="1-4">
-              <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
-            </el-menu-item>
-            <el-menu-item v-if="showItem" index="1-5">
-              <router-link :to="{name:'order'}" style="font-size: 16px"><a>我的订单</a></router-link>
-            </el-menu-item>
-            <el-menu-item v-if="showItem" index="1-6"><el-link :underline="false" @click="out()">退出登录</el-link></el-menu-item>
-          </el-submenu>
+      <el-menu
+        :default-active="activeIndex"
+        class="el-menu-demo"
+        mode="horizontal"
+        @select="handleSelect"
+        background-color="#fff"
+        text-color="#333"
+        font-size="20px"
+        active-text-color="red">
+        <el-submenu index="1" style="float: right;margin-right: 5%">
+          <template slot="title">
+            <router-link type="info" v-if="msg=='登录'" :to="{name:'login'}" style="color:black">{{msg}}</router-link>
+            <router-link type="info" v-else :to="{name:'userUpdate'}" style="color:black"> <el-avatar :src="msg"></el-avatar></router-link>
+          </template>
+          <el-menu-item v-if="showItem" index="1-1">
+            <router-link :to="{name:'myCollection'}" style="font-size: 16px"><a>我的收藏</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-2">
+            <router-link :to="{name:'mySubscription'}" style="font-size: 16px"><a>我的订阅</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-3">
+            <router-link :to="{name:'myCreation'}" style="font-size: 16px"><a>我的创作中心</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-4">
+            <router-link :to="{name:'userUpdate'}" style="font-size: 16px"><a>个人中心</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-5">
+            <router-link :to="{name:'order'}" style="font-size: 16px"><a>我的订单</a></router-link>
+          </el-menu-item>
+          <el-menu-item v-if="showItem" index="1-6"><el-link :underline="false" @click="out()">退出登录</el-link></el-menu-item>
+        </el-submenu>
 
-          <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
-          <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
-          <el-submenu index="5" style="float: left">
-            <template slot="title">资源</template>
-            <el-menu-item index="5-1"><router-link :to="{name:'Classify',params:{typeKey:typeKey1}}">电影</router-link></el-menu-item>
-            <el-menu-item index="5-2"><router-link :to="{name:'Classify',params:{typeKey:typeKey2}}">动漫</router-link></el-menu-item>
-            <el-menu-item index="5-3"><router-link :to="{name:'Classify',params:{typeKey:typeKey3}}">电视剧</router-link></el-menu-item>
-          </el-submenu>
-          <el-menu-item index="6" style="float: left">
-            <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
-          </el-menu-item>
-          <el-menu-item index="7" style="float: left">
-            <router-link :to="{name:'shop'}" style="font-size: 16px"><a>商城</a></router-link>
-          </el-menu-item>
+        <el-menu-item style="float: left;margin-left: 5%"><div id="logo">FFF影评网</div></el-menu-item>
+        <el-menu-item index="4" style="float: left;margin-left: 3%"><a href="/">首页</a></el-menu-item>
+        <el-submenu index="5" style="float: left">
+          <template slot="title">资源</template>
+          <el-menu-item index="5-1"><router-link :to="{name:'Classify',params:{typeKey:typeKey1}}">电影</router-link></el-menu-item>
+          <el-menu-item index="5-2"><router-link :to="{name:'Classify',params:{typeKey:typeKey2}}">动漫</router-link></el-menu-item>
+          <el-menu-item index="5-3"><router-link :to="{name:'Classify',params:{typeKey:typeKey3}}">电视剧</router-link></el-menu-item>
+        </el-submenu>
+        <el-menu-item index="6" style="float: left">
+          <router-link :to="{name:'creation'}" style="font-size: 16px"><a>创作中心</a></router-link>
+        </el-menu-item>
+        <el-menu-item index="7" style="float: left">
+          <router-link :to="{name:'shop'}" style="font-size: 16px"><a>商城</a></router-link>
+        </el-menu-item>
 
-          <el-menu-item  style="float: right;width: 30%">
-            <el-input placeholder="请输入内容"  v-model="input3" class="input-with-select">
-              <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-menu-item>
-        </el-menu>
-      </div>
+        <el-menu-item  style="float: right;width: 30%">
+          <el-input placeholder="请输入内容"  v-model="input3" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-menu-item>
+      </el-menu>
+    </div>
 
       <div class="pic">
         <img src="http://q02obletz.bkt.clouddn.com/tyhj.jpg" style="width: 100%;height: 100px"/>
@@ -120,6 +120,7 @@
       out:function () {
         axios.get("api/user/loginOut").then(res=>{});
         location.reload();
+        this.$router.push("/")
       },
       handleSelect(key, keyPath) {   // 头部handleSelect函数
         console.log(key, keyPath);

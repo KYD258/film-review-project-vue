@@ -210,6 +210,7 @@
       out:function () {
         axios.get("api/user/loginOut").then(res=>{});
         location.reload();
+        this.$router.push("/")
       },
       handleSelect(key, keyPath) {   // 头部handleSelect函数
         console.log(key, keyPath);

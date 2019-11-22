@@ -219,6 +219,7 @@
       out:function () {
         axios.get("api/user/loginOut").then(res=>{});
         location.reload();
+        this.$router.push("/")
       },
       deleteCreation:function (creationId) {
         var url = "/api/filmreview-personalcenter/creation/deleteUserCreation"

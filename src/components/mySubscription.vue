@@ -118,6 +118,7 @@
       out:function () {
         axios.get("api/user/loginOut").then(res=>{});
         location.reload();
+        this.$router.push("/")
       },
       videoQuery:function () {
         axios.get('/api/filmreview-personalcenter/collection/findSubscription').then(res=>{

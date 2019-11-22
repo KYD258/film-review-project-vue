@@ -30,10 +30,12 @@
          <div style="width: 80%;margin: auto">
           <div>
             <el-row>
-              <el-col :span="8" v-for="(video1, index) in video1" style="width: 25%; margin-top: 25px">
+              <el-col :span="8" v-for="(video1, index) in video1" :key="index" style="width: 25%; margin-top: 25px">
                 <div>
                   <el-card :body-style="{ padding: '0px' }" style="width: 70%">
-                    <img :src="video1.videoPic" class="image" style="height: 200px">
+                    <router-link :to="{name:'VideoPlay',params:{videoId:video1.videoId}}">
+                      <img :src="video1.videoPic" class="image" style="height: 200px">
+                    </router-link>
                   </el-card>
                 </div>
                 <div style="margin-top: 10px; width: 40%">
